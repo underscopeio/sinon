@@ -206,6 +206,20 @@ describe("util/core/wrapMethod", function () {
             assert.same(this.object.method, wrapper);
         });
 
+        try {
+            eval(
+                "it('returns generator wrapper', function () {" +
+                    "this.generator = function* () {};" +
+                    "this.object = { generator: this.generator };" +
+                    "var wrapper = wrapMethod(this.object, 'generator', function* () {});" +
+                    "assert.same(this.object.generator, wrapper);" +
+                "});"
+            );
+        } catch (err) {
+            //ES6 not supported
+        }
+
+
         it("restore brings back original method", function () {
             wrapMethod(this.object, "method", function () {});
             this.object.method.restore();
